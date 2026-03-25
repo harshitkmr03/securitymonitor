@@ -4,10 +4,14 @@ import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
 @Table(name = "access_logs")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class AccessLog {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,5 +28,8 @@ public class AccessLog {
 
     @Column(name = "status")
     private String status;
+
+    // ✅ Explicit default constructor (safe for JPA + Swagger)
+    public AccessLog() {}
 
 }

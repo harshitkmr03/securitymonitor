@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class UserService {
 
+
     private final UserRepository userRepository;
     private final AccessLogRepository accessLogRepository;
 
@@ -57,24 +58,32 @@ public class UserService {
             log.setStatus("FAILED");
             accessLogRepository.save(log);
 
-            return "User not found";
+            throw new RuntimeException("User not found");
         }
 
         User user = optionalUser.get();
         log.setUserId(user.getId());
 
+        // 🔥 NEW: Account Lock Check
+        if (user.getIsLocked() != null && user.getIsLocked()) {
+            return "Account is locked due to multiple failed attempts";
+        }
+
+        // Password check
         if (!encoder.matches(password, user.getPassword())) {
 
             log.setStatus("FAILED");
             accessLogRepository.save(log);
 
-            return "Invalid password";
+            throw new RuntimeException("Invalid password");
         }
 
+        // Success
         log.setStatus("SUCCESS");
         accessLogRepository.save(log);
 
         return "Login successful";
     }
+
 
 }
