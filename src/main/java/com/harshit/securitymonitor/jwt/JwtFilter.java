@@ -27,7 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // ✅ STRICT MATCH (FINAL FIX)
+        // STRICT MATCH (FINAL FIX)
         if (path.startsWith("/api/auth/")) {
             return true;
         }

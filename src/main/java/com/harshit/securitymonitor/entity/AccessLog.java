@@ -29,7 +29,7 @@ public class AccessLog {
     @Column(name = "status")
     private String status;
 
-    // ✅ Explicit default constructor (safe for JPA + Swagger)
+    // Explicit default constructor (safe for JPA + Swagger)
     public AccessLog() {}
 
 }

@@ -25,7 +25,7 @@ public class ThreatAlert {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // ✅ Default constructor (important for JPA + Swagger)
+    // Default constructor (important for JPA + Swagger)
     public ThreatAlert() {}
 
 

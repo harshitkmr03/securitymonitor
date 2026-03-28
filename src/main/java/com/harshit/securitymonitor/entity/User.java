@@ -28,7 +28,7 @@ public class User {
     @Column(name = "is_locked")
     private Boolean isLocked = false;
 
-    // ✅ Explicit default constructor (safe for JPA + Swagger)
+    // Explicit default constructor (safe for JPA + Swagger)
     public User() {}
 
 
