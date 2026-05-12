@@ -7,6 +7,7 @@ import com.harshit.securitymonitor.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.Map;
@@ -23,7 +24,7 @@ public class AuthController {
 
     // REGISTER USING DTO (FIXED)
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
 
         // Convert DTO → Entity (SAFE WAY)
         User user = new User();
@@ -42,7 +43,7 @@ public class AuthController {
 
     // LOGIN (same as before)
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request,
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest request,
                                    HttpServletRequest httpServletRequest) {
 
         String ip = httpServletRequest.getRemoteAddr();

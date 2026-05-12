@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -12,10 +13,15 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // Move this to application.properties in future
-    private static final String SECRET = "your-super-secret-key-32-characters-long-min!!";
+    @Value("${jwt.secret}")
+    private String secret;
 
-    private static final Key KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
+    private Key key;
+
+    @jakarta.annotation.PostConstruct
+    public void init() {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    }
 
     // 1 hour expiration
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
@@ -27,7 +33,7 @@ public class JwtUtil {
                 .setSubject(username)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(KEY, SignatureAlgorithm.HS256)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -49,13 +55,12 @@ public class JwtUtil {
 
         try {
             return Jwts.parserBuilder()   // modern (non-deprecated)
-                    .setSigningKey(KEY)
+                    .setSigningKey(key)
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
 
         } catch (Exception e) {
-            System.out.println("JWT Error: " + e.getMessage()); // optional logging
             return null;
         }
     }
